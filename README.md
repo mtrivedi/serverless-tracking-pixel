@@ -22,8 +22,25 @@ Deploying the project requires two environment variables to be defined, to provi
 A simple one line to deploy then is:
 
 ```bash
-$ PROJECT=myproject STAGE=dev sls deploy 
+$ export PROJECT=third-party-tracker
+$ export STAGE=dev
+$ export COOKIE_NAME=tpt_cookie
+$ export SERVICE=tpt-service
 ```
+Run npm from the project directory, so that dependencies are packaged for lambda deployment
+```bash
+npm install
+```
+
+```bash
+$ export SIGNATURE=$(aws kms encrypt --key-id <alias> --plaintext 'my secret key' --query 'CiphertextBlob' --output text)
+```
+
+Deployment
+```bash
+  serverless deploy
+```
+
 Once deployed, note the APIGateway url provided, to test the service with a simple curl command:
 ```bash
 $ curl -v "https://<api-gw-url>/dev/track.gif?foo=1&bar=2" -H "Cookie: some-cookie=1234" -H "Referer: http://www.google.com"
